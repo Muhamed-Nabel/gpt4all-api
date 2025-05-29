@@ -1,0 +1,1 @@
+web: python gpt4all_api.py
