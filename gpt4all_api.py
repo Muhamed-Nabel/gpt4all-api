@@ -10,13 +10,20 @@ model = GPT4All(model_name)
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.get_json()
+    print("Received data:", data)  # Debug log
     if not data or "prompt" not in data:
         return jsonify({"error": "No prompt provided"}), 400
 
     prompt = data["prompt"]
-    with model.chat_session():
-        response = model.generate(prompt, temp=0.7)
-        return jsonify({"response": response})
+    try:
+        with model.chat_session():
+            response = model.generate(prompt, temp=0.7)
+            print("Generated response:", response)  # Debug log
+            return jsonify({"response": response})
+    except Exception as e:
+        print("Error in /chat:", str(e))  # Error log
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/', methods=['GET'])
 def index():
